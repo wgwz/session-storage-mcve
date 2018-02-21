@@ -1,0 +1,40 @@
+<!doctype html>
+<head>
+  <title>sourcehtml</title>
+</head>
+
+<body>
+  <script type="application/javascript">
+    console.log('helloworld')
+    function httpGetAsync(theUrl, callback) {
+        var xmlHttp = new XMLHttpRequest();
+        xmlHttp.onreadystatechange = function() { 
+            if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
+                callback(xmlHttp.responseText);
+        }
+        xmlHttp.open("GET", theUrl, true); // true for asynchronous 
+        xmlHttp.send(null);
+    }
+    function fillMessage(responseText) {
+        document.getElementById("message").innerHTML = responseText;
+    }
+    function clickCounter() {
+        counter = sessionStorage.getItem('counter');
+        if (counter !== null) {
+            num = JSON.parse(counter);
+            num = num + 1;
+            sessionStorage.setItem('counter', JSON.stringify(num))
+            document.getElementById("demo").innerHTML = num;
+        } else {
+            init_num = 1;
+            sessionStorage.setItem('counter', init_num);
+            document.getElementById("demo").innerHTML = init_num;
+        }
+        httpGetAsync('/get', fillMessage)
+    }
+  </script>
+  <div id='message'></div>
+  <div id='demo'></div>
+  <button onclick="clickCounter()">Click me</button>
+</body>
+</html>
